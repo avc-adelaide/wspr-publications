@@ -29,6 +29,14 @@ def parse_args() -> argparse.Namespace:
         default="WSPR Journal Publications",
         help="Page title",
     )
+    parser.add_argument(
+        "--scholar-user-id",
+        default="",
+        help=(
+            "Google Scholar user id used to build links from a 'Scholar ID' column "
+            "(e.g. kxCnpPEAAAAJ)."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -39,10 +47,16 @@ def read_csv(csv_path: Path) -> tuple[list[str], list[dict[str, str]]]:
         return list(reader.fieldnames or []), rows
 
 
-def build_html(page_title: str, headers: list[str], rows: list[dict[str, str]]) -> str:
+def build_html(
+    page_title: str,
+    headers: list[str],
+    rows: list[dict[str, str]],
+    scholar_user_id: str,
+) -> str:
     safe_title = html.escape(page_title)
     headers_json = json.dumps(headers, ensure_ascii=False)
     rows_json = json.dumps(rows, ensure_ascii=False)
+    scholar_user_id_json = json.dumps((scholar_user_id or "").strip(), ensure_ascii=False)
 
     return f"""<!doctype html>
 <html lang=\"en\">
@@ -173,6 +187,7 @@ def build_html(page_title: str, headers: list[str], rows: list[dict[str, str]]) 
   <script>
     const headers = {headers_json};
     const allRows = {rows_json};
+    const scholarUserId = {scholar_user_id_json};
 
     const searchInput = document.getElementById("search");
     const clearButton = document.getElementById("clear");
@@ -250,6 +265,16 @@ def build_html(page_title: str, headers: list[str], rows: list[dict[str, str]]) 
             link.target = "_blank";
             link.rel = "noopener noreferrer";
             td.appendChild(link);
+          }} else if (h === "Scholar ID" && value) {{
+            const link = document.createElement("a");
+            const citationForView = value.includes(":")
+              ? value
+              : (scholarUserId ? `${{scholarUserId}}:${{value}}` : value);
+            link.href = `https://scholar.google.com/citations?view_op=view_citation&citation_for_view=${{encodeURIComponent(citationForView)}}`;
+            link.textContent = value;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            td.appendChild(link);
           }} else {{
             td.textContent = value;
           }}
@@ -283,7 +308,9 @@ def main() -> None:
 
     headers, rows = read_csv(csv_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(build_html(args.title, headers, rows), encoding="utf-8")
+    out_path.write_text(
+        build_html(args.title, headers, rows, args.scholar_user_id), encoding="utf-8"
+    )
     print(f"Wrote {out_path} from {csv_path} ({len(rows)} rows)")
 
 

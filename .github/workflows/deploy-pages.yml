@@ -34,7 +34,7 @@ jobs:
 
       - name: Build static site
         run: |
-          python scripts/csv_to_html.py --csv wspr-papers-journal.csv --out site/index.html --title "WSPR Journal Publications"
+          python scripts/csv_to_html.py --csv wspr-papers-journal.csv --out site/index.html --title "WSPR Journal Publications" --scholar-user-id kxCnpPEAAAAJ
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
