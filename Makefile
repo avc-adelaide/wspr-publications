@@ -1,8 +1,12 @@
+SHELL := /bin/bash
 
 AURORA_BIBFILE=aurora-journal-papers.bib
 RMS_FILENAME=rms
 EXT_DIR=external
 REPORTS_DIR=reports
+
+LOCAL_BIB=wspr-papers-journal.bib
+TEXMF_BIB=/Users/will/texmf/bibtex/bib/wspr.bib
 
 help:
 	@echo "scholar - run Google Scholar report"
@@ -31,6 +35,25 @@ title: ${REPORTS_DIR}/${RMS_FILENAME}.txt
 	# comm -23 ${REPORTS_DIR}/title-rms.txt ${REPORTS_DIR}/title-aurora.txt
 	# echo "PAPERS in AURORA but not in RMS:"
 	# comm -13 ${REPORTS_DIR}/title-rms.txt ${REPORTS_DIR}/title-aurora.txt
+
+local:
+	@echo "Checking LOCAL REPO vs TEXMF bib files:"
+	@echo "  ${LOCAL_BIB}"
+	@echo "  ${TEXMF_BIB}"
+	@only_local=$$(comm -23 \
+	  <(sed -n 's/^@[^{]*{\([^,]*\),*/\1/p' "${LOCAL_BIB}" | sort) \
+	  <(sed -n 's/^@[^{]*{\([^,]*\),*/\1/p' "${TEXMF_BIB}" | sort)); \
+	if [ -n "$$only_local" ]; then \
+	  echo "Cite keys only in LOCAL"; \
+	  echo "$$only_local"; \
+	fi; \
+	only_texmf=$$(comm -13 \
+	  <(sed -n 's/^@[^{]*{\([^,]*\),*/\1/p' "${LOCAL_BIB}" | sort) \
+	  <(sed -n 's/^@[^{]*{\([^,]*\),*/\1/p' "${TEXMF_BIB}" | sort)); \
+	if [ -n "$$only_texmf" ]; then \
+	  echo "Cite keys only in TEXMF"; \
+	  echo "$$only_texmf"; \
+	fi
 
 ${REPORTS_DIR}/${RMS_FILENAME}.txt:
 	pdftotext ${EXT_DIR}/${RMS_FILENAME}.pdf ${REPORTS_DIR}/${RMS_FILENAME}.txt
