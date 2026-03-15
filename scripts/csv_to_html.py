@@ -300,6 +300,7 @@ _TAB_CSS = """\
     .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
+    .tab-controls { margin-bottom: 12px; }
 """
 
 
@@ -485,13 +486,18 @@ def build_html_tabs(
         for i, (name, _, _) in enumerate(tabs)
     )
 
-    # Build tab panels
+    # Build tab panels (search controls live inside each panel so that
+    # buildTable() can locate them via container.querySelector())
     tab_panels_parts: list[str] = []
     tab_data_parts: list[str] = []
     for i, (name, headers, rows) in enumerate(tabs):
         active_cls = " active" if i == 0 else ""
         tab_panels_parts.append(
             f'    <div id="tab{i}" class="tab-panel{active_cls}">\n'
+            f'      <div class="controls tab-controls">\n'
+            f'        <input class="search-input" type="search" placeholder="Search {html.escape(name)}" />\n'
+            f'        <button class="button clear-btn" type="button">Clear</button>\n'
+            f'      </div>\n'
             f'      <div class="table-card">\n'
             f'        <div class="scroll">\n'
             f'          <table>\n'
@@ -512,18 +518,6 @@ def build_html_tabs(
     tab_panels_html = "\n".join(tab_panels_parts)
     tab_data_js = "[\n" + ",\n".join(tab_data_parts) + "\n]"
 
-    # Build controls HTML (one search/clear pair per tab, hidden per tab)
-    controls_parts: list[str] = []
-    for i, (name, _, _) in enumerate(tabs):
-        display = "" if i == 0 else ' style="display:none"'
-        controls_parts.append(
-            f'        <span class="tab-controls" data-tab="tab{i}"{display}>'
-            f'<input class="search-input" type="search" placeholder="Search {html.escape(name)}" />'
-            f'<button class="button clear-btn" type="button">Clear</button>'
-            f'</span>'
-        )
-    controls_html = "\n".join(controls_parts)
-
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -542,8 +536,6 @@ def build_html_tabs(
         <h1>{safe_title}</h1>
         <div class="meta">Sortable and searchable publication tables</div>
       </div>
-      <div class="controls">
-{controls_html}
       </div>
     </div>
 
@@ -567,15 +559,10 @@ def build_html_tabs(
     tabBtns.forEach((btn) => {{
       btn.addEventListener("click", () => {{
         const target = btn.dataset.tab;
-        // Activate selected tab button and panel
         tabBtns.forEach((b) => b.classList.toggle("active", b === btn));
         document.querySelectorAll(".tab-panel").forEach((p) =>
           p.classList.toggle("active", p.id === target)
         );
-        // Show/hide per-tab search controls
-        document.querySelectorAll(".tab-controls").forEach((c) => {{
-          c.style.display = c.dataset.tab === target ? "" : "none";
-        }});
       }});
     }});
   </script>
