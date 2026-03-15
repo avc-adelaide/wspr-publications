@@ -1,6 +1,7 @@
 SHELL := /bin/bash
 
 AURORA_BIBFILE=aurora-journal-papers.bib
+AURORA_CONF_BIBFILE=aurora-conf-papers.bib
 RMS_FILENAME=rms
 EXT_DIR=external
 REPORTS_DIR=reports
@@ -9,11 +10,15 @@ LOCAL_BIB=wspr-papers-journal.bib
 TEXMF_BIB=/Users/will/texmf/bibtex/bib/wspr.bib
 
 help:
-	@echo "scholar - run Google Scholar report"
-	@echo "install - install req'd packages"
+	@echo "scholar    - run Google Scholar report"
+	@echo "conf-csv   - regenerate aurora-conf-papers.csv from BibTeX"
+	@echo "install    - install req'd packages"
 
 scholar:
 	uv run scripts/scholar_sync.py --user-id kxCnpPEAAAAJ --update-scholar-id
+
+conf-csv:
+	python3 scripts/bib_to_csv.py ${EXT_DIR}/${AURORA_CONF_BIBFILE} aurora-conf-papers.csv
 
 install:
 	@echo "Installing poppler for pdftotext:"
