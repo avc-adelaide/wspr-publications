@@ -7,7 +7,7 @@ on:
     paths:
       - "wspr-papers-journal.csv"
       - "wspr-papers-journal.bib"
-      - "aurora-conf-papers.csv"
+      - "wspr-papers-conf.csv"
       - "external/aurora-conf-papers.bib"
       - "scripts/csv_to_html.py"
       - "scripts/bib_to_csv.py"
@@ -41,7 +41,7 @@ jobs:
             --title "WSPR Publications" \
             --scholar-user-id kxCnpPEAAAAJ \
             --tab "Journal Papers" wspr-papers-journal.csv \
-            --tab "Conference Papers" aurora-conf-papers.csv \
+            --tab "Conference Papers" wspr-papers-conf.csv \
             --out site/index.html
 
       - name: Setup Pages

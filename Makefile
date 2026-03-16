@@ -11,14 +11,15 @@ TEXMF_BIB=/Users/will/texmf/bibtex/bib/wspr.bib
 
 help:
 	@echo "scholar    - run Google Scholar report"
-	@echo "conf-csv   - regenerate aurora-conf-papers.csv from BibTeX"
+	@echo "csv-conf   - regenerate wspr-papers-conf.csv from BibTeX"
 	@echo "install    - install req'd packages"
 
 scholar:
 	uv run scripts/scholar_sync.py --user-id kxCnpPEAAAAJ --update-scholar-id
 
-conf-csv:
-	python3 scripts/bib_to_csv.py ${EXT_DIR}/${AURORA_CONF_BIBFILE} aurora-conf-papers.csv
+csv-conf:
+	@echo "WARNING — DESTRUCTIVE OPERATION! USE GIT RESET IF NOT HAPPY"
+	uv run scripts/bib_to_csv.py ${EXT_DIR}/${AURORA_CONF_BIBFILE} wspr-papers-conf.csv
 
 install:
 	@echo "Installing poppler for pdftotext:"
