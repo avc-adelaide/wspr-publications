@@ -8,6 +8,7 @@ on:
       - "wspr-papers-journal.csv"
       - "wspr-papers-journal.bib"
       - "wspr-papers-conf.csv"
+      - "wspr-theses.bib"
       - "external/aurora-conf-papers.bib"
       - "scripts/csv_to_html.py"
       - "scripts/bib_to_csv.py"
@@ -42,6 +43,7 @@ jobs:
             --scholar-user-id kxCnpPEAAAAJ \
             --tab "Journal Papers" wspr-papers-journal.csv \
             --tab "Conference Papers" wspr-papers-conf.csv \
+            --theses "Theses" wspr-theses.bib \
             --out site/index.html
 
       - name: Setup Pages

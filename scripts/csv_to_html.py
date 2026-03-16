@@ -20,6 +20,7 @@ import argparse
 import csv
 import html
 import json
+import re
 from pathlib import Path
 
 
@@ -61,6 +62,17 @@ def parse_args() -> argparse.Namespace:
             "May be repeated. When any --tab is given, --csv is ignored."
         ),
     )
+    parser.add_argument(
+        "--theses",
+        nargs=2,
+        metavar=("TAB_NAME", "BIB_PATH"),
+        action="append",
+        default=[],
+        help=(
+            "Add a theses accordion tab with the given name, reading entries from BIB_PATH "
+            "(a BibTeX file containing @phdthesis / @mastersthesis entries). May be repeated."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -69,6 +81,178 @@ def read_csv(csv_path: Path) -> tuple[list[str], list[dict[str, str]]]:
         reader = csv.DictReader(f)
         rows = [{k: (v or "") for k, v in row.items()} for row in reader]
         return list(reader.fieldnames or []), rows
+
+
+# ---------------------------------------------------------------------------
+# BibTeX thesis parser
+# ---------------------------------------------------------------------------
+
+def _format_author(author: str) -> str:
+    """Convert a BibTeX author string to display order (First Last)."""
+    if "," in author:
+        last, _, first = author.partition(",")
+        return f"{first.strip()} {last.strip()}"
+    return author.strip()
+
+
+def _latex_to_text(text: str) -> str:
+    """Convert common LaTeX escape sequences to plain Unicode text."""
+    return text.replace("\\%", "%").replace("\\&", "&").replace("\\$", "$")
+
+
+def parse_bib_theses(bib_path: Path) -> list[dict[str, str]]:
+    """Parse a BibTeX file and return a list of thesis entry dicts.
+
+    Supports ``@phdthesis`` and ``@mastersthesis`` entry types.
+    Preserves the order of entries as they appear in the file.
+    Each returned dict has at least ``entry_type`` and ``key`` keys, plus
+    any BibTeX fields present (``author``, ``year``, ``title``, ``school``,
+    ``url``, ``note``, ``abstract``, …).
+    """
+    text = bib_path.read_text(encoding="utf-8")
+    entries: list[dict[str, str]] = []
+
+    entry_re = re.compile(r"@(phdthesis|mastersthesis)\s*\{", re.IGNORECASE)
+    field_re = re.compile(r"\s*(\w+)\s*=\s*")
+
+    for entry_match in entry_re.finditer(text):
+        entry_type = entry_match.group(1).lower()
+        content_start = entry_match.end()
+
+        # Locate the matching closing brace of the whole entry.
+        depth = 1
+        pos = content_start
+        while pos < len(text) and depth > 0:
+            c = text[pos]
+            if c == "{":
+                depth += 1
+            elif c == "}":
+                depth -= 1
+            pos += 1
+        content = text[content_start : pos - 1]
+
+        # Cite key is everything before the first comma.
+        first_comma = content.find(",")
+        if first_comma < 0:
+            continue
+
+        entry: dict[str, str] = {
+            "entry_type": entry_type,
+            "key": content[:first_comma].strip(),
+        }
+
+        # Parse field = value assignments.
+        remaining = content[first_comma + 1 :]
+        fpos = 0
+        while fpos < len(remaining):
+            fm = field_re.match(remaining, fpos)
+            if not fm:
+                break
+
+            field_name = fm.group(1).lower()
+            fpos = fm.end()
+
+            # Skip whitespace before value delimiter.
+            while fpos < len(remaining) and remaining[fpos] in " \t\n":
+                fpos += 1
+            if fpos >= len(remaining):
+                break
+
+            ch = remaining[fpos]
+            if ch == "{":
+                depth = 1
+                fpos += 1
+                val_start = fpos
+                while fpos < len(remaining) and depth > 0:
+                    if remaining[fpos] == "{":
+                        depth += 1
+                    elif remaining[fpos] == "}":
+                        depth -= 1
+                    fpos += 1
+                value = remaining[val_start : fpos - 1]
+            elif ch == '"':
+                fpos += 1
+                val_start = fpos
+                while fpos < len(remaining) and remaining[fpos] != '"':
+                    # Skip past backslash-escaped characters (e.g. \")
+                    if remaining[fpos] == "\\" and fpos + 1 < len(remaining):
+                        fpos += 2
+                    else:
+                        fpos += 1
+                value = remaining[val_start:fpos]
+                fpos += 1  # skip closing '"'
+            else:
+                val_start = fpos
+                while fpos < len(remaining) and remaining[fpos] not in ",}\n":
+                    fpos += 1
+                value = remaining[val_start:fpos].strip()
+
+            # Store abstract with its raw whitespace so that paragraph breaks
+            # (blank lines) can be preserved when rendering.  Collapse
+            # whitespace for all other fields.
+            if field_name == "abstract":
+                entry[field_name] = value
+            else:
+                entry[field_name] = " ".join(value.split())
+
+            # Skip trailing comma and whitespace before the next field.
+            while fpos < len(remaining) and remaining[fpos] in ", \t\n":
+                fpos += 1
+
+        entries.append(entry)
+
+    return entries
+
+
+def _abstract_html(raw: str) -> str:
+    """Convert a BibTeX abstract to HTML, preserving paragraph breaks.
+
+    Blank lines in the raw value are treated as paragraph separators.
+    Each paragraph is rendered as a ``<p>`` inside a styled container.
+    """
+    paragraphs = [
+        " ".join(p.split())
+        for p in re.split(r"\n[ \t]*\n", raw)
+        if p.strip()
+    ]
+    if not paragraphs:
+        return ""
+    inner = "".join(f"<p>{html.escape(p)}</p>" for p in paragraphs)
+    return f'<div class="thesis-abstract-text">{inner}</div>'
+
+
+def _thesis_entry_html(entry: dict[str, str]) -> str:
+    """Render a single thesis BibTeX entry as an accordion-style HTML block."""
+    year = html.escape(entry.get("year", ""))
+    author = html.escape(_format_author(entry.get("author", "")))
+    title = html.escape(_latex_to_text(entry.get("title", "")))
+    school = html.escape(_latex_to_text(entry.get("school", "")))
+    url_raw = entry.get("url", "")
+    note = html.escape(_latex_to_text(entry.get("note", "")))
+    abstract_raw = _latex_to_text(entry.get("abstract", ""))
+
+    lines: list[str] = []
+    lines.append('<div class="thesis-entry">')
+    lines.append(f'  <h2 class="thesis-heading">{year} &#x2013; {author}</h2>')
+    lines.append('  <ul class="thesis-meta">')
+    lines.append(f"    <li>Thesis title: {title}</li>")
+    lines.append(f"    <li>School: {school}</li>")
+    if note:
+        lines.append(f"    <li>{note}</li>")
+    if url_raw:
+        url_esc = html.escape(url_raw)
+        lines.append(
+            f'    <li>University record: <a href="{url_esc}" target="_blank"'
+            f' rel="noopener noreferrer">{url_esc}</a></li>'
+        )
+    lines.append("  </ul>")
+    if abstract_raw:
+        lines.append("  <details>")
+        lines.append("    <summary>Abstract</summary>")
+        lines.append(f"    {_abstract_html(abstract_raw)}")
+        lines.append("  </details>")
+    lines.append("</div>")
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
@@ -303,6 +487,60 @@ _TAB_CSS = """\
     .tab-controls { margin-bottom: 12px; }
 """
 
+_THESES_CSS = """\
+    .thesis-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-top: 4px;
+    }
+    .thesis-entry {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 8px rgba(24, 39, 75, 0.06);
+    }
+    .thesis-heading {
+      margin: 0 0 10px 0;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    .thesis-meta {
+      margin: 0 0 8px 20px;
+      padding: 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .thesis-entry details {
+      margin-top: 10px;
+    }
+    .thesis-entry summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 0.95rem;
+      padding: 4px 0;
+      user-select: none;
+    }
+    .thesis-entry summary:hover { text-decoration: underline; }
+    .thesis-abstract-text {
+      margin: 10px 0 0 0;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--accent-soft);
+      border-radius: 8px;
+    }
+    .thesis-abstract-text p {
+      margin: 0 0 0.75em 0;
+    }
+    .thesis-abstract-text p:last-child {
+      margin-bottom: 0;
+    }
+"""
+
 
 def build_html(
     page_title: str,
@@ -469,12 +707,19 @@ def build_html(
 
 def build_html_tabs(
     page_title: str,
-    tabs: list[tuple[str, list[str], list[dict[str, str]]]],
+    tabs: list[dict],
     scholar_user_id: str,
 ) -> str:
     """Build a multi-tab HTML page.
 
-    *tabs* is a list of ``(tab_name, headers, rows)`` tuples.
+    *tabs* is a list of tab specification dicts.  Each dict must have at least
+    a ``"type"`` key (``"table"`` or ``"theses"``) and a ``"name"`` key.
+
+    * ``"table"`` tabs additionally require ``"headers"`` (list of column
+      names) and ``"rows"`` (list of row dicts), matching the output of
+      :func:`read_csv`.
+    * ``"theses"`` tabs additionally require ``"entries"`` (list of thesis
+      entry dicts), matching the output of :func:`parse_bib_theses`.
     """
     safe_title = html.escape(page_title)
     scholar_user_id_json = json.dumps((scholar_user_id or "").strip(), ensure_ascii=False)
@@ -482,38 +727,58 @@ def build_html_tabs(
     # Build tab-bar buttons
     tab_buttons = "\n".join(
         f'      <button class="tab-btn{" active" if i == 0 else ""}" '
-        f'data-tab="tab{i}">{html.escape(name)}</button>'
-        for i, (name, _, _) in enumerate(tabs)
+        f'data-tab="tab{i}">{html.escape(tab["name"])}</button>'
+        for i, tab in enumerate(tabs)
     )
 
-    # Build tab panels (search controls live inside each panel so that
-    # buildTable() can locate them via container.querySelector())
+    # Build tab panels.
+    # Table panels include search/sort controls rendered via JS.
+    # Theses panels are static accordion HTML.
     tab_panels_parts: list[str] = []
+    # tabData collects data only for *table* tabs so that buildTable() can
+    # be called with the correct panel id.
     tab_data_parts: list[str] = []
-    for i, (name, headers, rows) in enumerate(tabs):
+    for i, tab in enumerate(tabs):
         active_cls = " active" if i == 0 else ""
-        tab_panels_parts.append(
-            f'    <div id="tab{i}" class="tab-panel{active_cls}">\n'
-            f'      <div class="controls tab-controls">\n'
-            f'        <input class="search-input" type="search" placeholder="Search {html.escape(name)}" />\n'
-            f'        <button class="button clear-btn" type="button">Clear</button>\n'
-            f'      </div>\n'
-            f'      <div class="table-card">\n'
-            f'        <div class="scroll">\n'
-            f'          <table>\n'
-            f'            <thead><tr class="head-row"></tr></thead>\n'
-            f'            <tbody class="body-rows"></tbody>\n'
-            f'          </table>\n'
-            f'        </div>\n'
-            f'      </div>\n'
-            f'      <div class="count"></div>\n'
-            f'    </div>'
-        )
-        tab_data_parts.append(
-            f'  {{ name: {json.dumps(name, ensure_ascii=False)}, '
-            f'headers: {json.dumps(headers, ensure_ascii=False)}, '
-            f'rows: {json.dumps(rows, ensure_ascii=False)} }}'
-        )
+        name = tab["name"]
+        tab_type = tab.get("type", "table")
+
+        if tab_type == "theses":
+            entries = tab["entries"]
+            thesis_items = "\n".join(_thesis_entry_html(e) for e in entries)
+            tab_panels_parts.append(
+                f'    <div id="tab{i}" class="tab-panel{active_cls}">\n'
+                f'      <div class="thesis-list">\n'
+                f"{thesis_items}\n"
+                f"      </div>\n"
+                f"    </div>"
+            )
+        else:
+            # Default: table tab
+            headers = tab["headers"]
+            rows = tab["rows"]
+            tab_panels_parts.append(
+                f'    <div id="tab{i}" class="tab-panel{active_cls}">\n'
+                f'      <div class="controls tab-controls">\n'
+                f'        <input class="search-input" type="search" placeholder="Search {html.escape(name)}" />\n'
+                f'        <button class="button clear-btn" type="button">Clear</button>\n'
+                f"      </div>\n"
+                f'      <div class="table-card">\n'
+                f'        <div class="scroll">\n'
+                f"          <table>\n"
+                f'            <thead><tr class="head-row"></tr></thead>\n'
+                f'            <tbody class="body-rows"></tbody>\n'
+                f"          </table>\n"
+                f"        </div>\n"
+                f"      </div>\n"
+                f'      <div class="count"></div>\n'
+                f"    </div>"
+            )
+            tab_data_parts.append(
+                f'  {{ id: "tab{i}", name: {json.dumps(name, ensure_ascii=False)}, '
+                f"headers: {json.dumps(headers, ensure_ascii=False)}, "
+                f"rows: {json.dumps(rows, ensure_ascii=False)} }}"
+            )
 
     tab_panels_html = "\n".join(tab_panels_parts)
     tab_data_js = "[\n" + ",\n".join(tab_data_parts) + "\n]"
@@ -527,6 +792,7 @@ def build_html_tabs(
   <style>
 {_COMMON_CSS}
 {_TAB_CSS}
+{_THESES_CSS}
   </style>
 </head>
 <body>
@@ -551,8 +817,8 @@ def build_html_tabs(
     const scholarUserId = {scholar_user_id_json};
     const tabData = {tab_data_js};
 
-    // Initialise each tab's table.
-    tabData.forEach((t, i) => buildTable("tab" + i, t.headers, t.rows, scholarUserId));
+    // Initialise each table tab.
+    tabData.forEach((t) => buildTable(t.id, t.headers, t.rows, scholarUserId));
 
     // Tab switching.
     const tabBtns = document.querySelectorAll(".tab-btn");
@@ -576,13 +842,18 @@ def main() -> None:
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if args.tab:
-        # Multi-tab mode
-        tabs: list[tuple[str, list[str], list[dict[str, str]]]] = []
+    if args.tab or args.theses:
+        # Multi-tab mode — collect all tab specs in CLI order:
+        # first all --tab entries, then all --theses entries.
+        tabs: list[dict] = []
         for tab_name, csv_path_str in args.tab:
             h, r = read_csv(Path(csv_path_str))
-            tabs.append((tab_name, h, r))
+            tabs.append({"type": "table", "name": tab_name, "headers": h, "rows": r})
             print(f"  Tab '{tab_name}': {len(r)} rows from {csv_path_str}")
+        for tab_name, bib_path_str in args.theses:
+            entries = parse_bib_theses(Path(bib_path_str))
+            tabs.append({"type": "theses", "name": tab_name, "entries": entries})
+            print(f"  Tab '{tab_name}': {len(entries)} theses from {bib_path_str}")
         html_text = build_html_tabs(args.title, tabs, args.scholar_user_id)
         out_path.write_text(html_text, encoding="utf-8")
         print(f"Wrote {out_path} with {len(tabs)} tab(s)")
