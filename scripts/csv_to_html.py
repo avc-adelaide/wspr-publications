@@ -235,8 +235,8 @@ def _thesis_entry_html(entry: dict[str, str]) -> str:
     lines.append('<div class="thesis-entry">')
     lines.append(f'  <h2 class="thesis-heading">{year} &#x2013; {author}</h2>')
     lines.append('  <ul class="thesis-meta">')
-    lines.append(f"    <li>Thesis title: {title}</li>")
-    lines.append(f"    <li>School: {school}</li>")
+    lines.append(f"    <li>Thesis title: <em>{title}</em></li>")
+    lines.append(f"    <li>{school}</li>")
     if note:
         lines.append(f"    <li>{note}</li>")
     if url_raw:
