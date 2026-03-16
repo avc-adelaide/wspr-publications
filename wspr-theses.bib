@@ -1,116 +1,241 @@
-%% This BibTeX bibliography file was created using BibDesk.
-%% https://bibdesk.sourceforge.io/
-
-%% Created for Will Robertson at 2026-03-01 16:52:40 +1030
-
-
-%% Saved with string encoding Unicode (UTF-8)
-
-
 
 @phdthesis{mcgowan2025-thesis,
 	author = {Sean McGowan},
-	date-added = {2026-03-01 16:49:02 +1030},
-	date-modified = {2026-03-01 16:52:38 +1030},
 	school = {School of Computer and Mathematical Sciences},
 	title = {Reconstructing dynamics from data: Algorithms for the prediction, estimation, and correction of chaotic systems},
 	url = {https://hdl.handle.net/2440/146173},
 	year = {2025},
+	abstract = {Methods for accurately predicting and estimating the states of chaotic systems are of considerable interest to many disciplines. The interacting effects of sensitivity to initial conditions, imperfect modelling, and noisy observations cause challenges for their application. As sensors become ubiquitous, approaching this problem from a data-driven perspective may offer improved accuracy compared to traditional modelbased forecasting. It is still of great importance that these data-driven methods provide interpretable and meaningful analysis of the system of interest, as is the goal of standard modelling. Motivated by the imperfections of both models and data, this thesis explores methods of reconstructing dynamical systems from observational data to empower novel techniques for prediction, estimation, and correction of chaotic systems. The algorithms developed in this work rely on Takens embeddings for the reconstruction of attractors from partially observed chaotic data, as well as ergodic hypotheses for well-defined function approximation of dynamic maps and flows. From these premises, we develop methods to reconstruct dynamics for their analysis, prediction, and estimation. Using an optimal control approach, a technique to extract rules governing the evolution of data is presented which allows the prediction, uncertainty quantification, and Lyapunov analysis of partially observed systems in settings of high noise and limited data. We extend these techniques to a data assimilation framework, where new observations of the system may be used to update the prediction in a model-free manner which shows promise in settings where models are imperfect or not available. Finally, these ideas are used to correct the bias between observations and model output to leverage the mechanistic understandability of knowledge-based models with the predictive power of data-driven methods in a way that provides interpretability of coherent unmodelled dynamics. These approaches are validated on simulated chaotic systems as well as empirical datasets of meteorological variables. This research suggests that data-driven techniques may outperform model-based methods with tasks of prediction and estimation in chaotic, noisy, and partially observed settings particularly when available models are imperfect. They also may assist in offering new methods of extracting interpretation and mechanistic understanding to improve existing models with missing dynamics.}
 }
 
-@phdthesis{hayden2018-thesis,
-	author = {David Hayden},
-	date-added = {2024-07-06 17:45:28 +0930},
-	date-modified = {2024-07-06 17:46:27 +0930},
-	keywords = {WSPR},
+@phdthesis{schubert2021-thesis,
+	author = {Benjamin W. Schubert},
 	school = {School of Mechanical Engineering, The University of Adelaide},
-	title = {Optimisation of the Rugby Wheelchair for Performance},
-	year = {2018},
-}
+	title = {Performance Enhancement of Submerged Ocean Wave Energy Converter using Nonlinear Stiffness},
+	url = {https://hdl.handle.net/2440/133608},
+	year = {2021},
+	abstract = {Ocean waves are a source of renewable energy with an enormous potential to augment
+ current renewable energy markets. Historically, the levelised cost of wave energy has
+ been higher than conventional renewable energy sources such as wind or solar. While
+ significant progress has been made in improving the economic viability of wave energy,
+ a robust control system for wave energy converters is an important step to progress
+ their technology readiness level. Utility scale wave energy systems typically require
+ large capital investment. Therefore, tools are required to accurately and reliably model
+ systems to predict the dynamic response and performance of potential control systems.
+ This thesis presents a passive control system in the form of a nonlinear stiffness to improve
+ the robustness of wave energy systems in situ as the ocean wave conditions change
+ over time. In the preceding work in the literature, two common shortcomings, which
+ may undermine the investigations, are: (i) the lack of comparisons against optimal conditions;
+ and, (ii) the simplistic representation of hydrodynamic forces in fluid-structure
+ interactions. These two gaps underpin the purpose of each chapter of this thesis and are
+ systematically addressed in the context of a submerged point absorbing wave energy
+ converter.
 
-@mastersthesis{mclean2018-thesis,
-	author = {McLean, Laurence},
-	date-added = {2024-07-06 17:40:08 +0930},
-	date-modified = {2026-03-01 16:48:34 +1030},
-	keywords = {WSPR},
-	school = {School of Mechanical Engineering, The University of Adelaide},
-	title = {High-Order Robotic Joint Sensing with Multiple Accelerometer and Gyroscope Systems},
-	url = {https://hdl.handle.net/2440/120357},
-	year = {2018},
+ Many differing designs of wave energy converters have been proposed in literature,
+ with fundamentally different modes of operation. This thesis initially compares the
+ application of a passive control system to point absorbing wave energy devices in
+ both floating and submerged contexts. It was found that the application of nonlinear
+ stiffness did not improve upon a system controlled by an optimised linear stiffness in
+ both floating and submerged scenarios for regular wave excitation. Since many floating
+ point absorbers experience a large hydrostatic stiffness, mechanisms to provide large
+ negative stiffness are required for tuning purposes. The nonlinear stiffness — which can
+ provide negative stiffness—offers a notable improvement in power production capacity
+ compared to the scenario with no control stiffness in floating systems. For a submerged
+ system, a position-dependent force is inherently required to counteract the constant
+ buoyancy force, so the system may be optimally tuned by a linear stiffness. For irregular
+ waves, which are more representative of ocean conditions, a floating system without an
+ optimised linear stiffness experiences a significant benefit, while systems with optimal linear parameters do not benefit in terms of the power converted. However, as ocean
+ conditions change in terms of significant wave height, energy period, and wave phase
+ relationships, the addition of a nonlinear stiffness mechanism provides an improvement
+ by enhancing the robustness to changing ocean conditions and by desensitising the
+ system to wave phasing.
+
+ The fidelity of simulations involving nonlinear stiffness may be improved by extending
+ the model to three degrees of freedom to capture geometric nonlinearities and
+ dynamic coupling between different degrees of freedom. In this work, the nonlinear
+ stiffness was parametrised and varied to demonstrate how and why the system responds
+ either positively or negatively depending on particular wave conditions. It was shown
+ that when the system is optimally tuned for a regular wave, the nonlinear stiffness is not
+ able to improve the amount of power generated. For irregular waves, the optimal performance
+ is observed when the system is tuned with a linear stiffness to give a particular
+ natural frequency—depending on wave condition. However, the same performance is
+ also achieved with a nonlinear stiffness augmentation when the system is oscillating
+ about any equilibrium point if the position dependent natural frequency is close to the
+ optimal natural frequency. A consistent beneficial trend is seen under different irregular
+ wave excitations. The nonlinear stiffness exposes the system to a changing effective resonance
+ frequency varying with position. As a result, performance improvements over the
+ linear system are observed when the system is tuned for one irregular wave and excited
+ by a different irregular wave. Therefore, the primary benefit of a nonlinear augmentation
+ is the improvement to robustness of such systems for varying sea conditions.
+ The hydrodynamic modelling of the fluid-structure interaction of a submerged
+ wave energy device is often achieved using linear potential flow theory. This limitation
+ is explored by comparing both linear and nonlinear hydrodynamic models (using a
+ validated computational fluid dynamics simulation) with a novel pseudo-nonlinear
+ model, which extends the linear model to incorporate pose-dependent hydrodynamic
+ parameters during simulation through pre-calculated values. The results showed that
+ linear hydrodynamics do not adequately represent all the important nonlinear effects.
+ The trends in motion also indicates the presence of frequency dependent fluid-structure
+ interactions associated with the resonance of body of water above the buoy. It is not
+ possible to represent such phenomena using standard linear potential flow methods.
+ Therefore, higher fidelity models should be employed to obtain more reliable indications
+ of performance.
+
+ The three degrees of freedom model was further extended by including nonlinear
+ stiffness into the validated computational fluid dynamics model. It was shown that inclusion
+ of nonlinear hydrodynamics shifts the optimal natural frequency of the system. For
+ regular waves, the nonlinear stiffness did not provide a consistent improvement. Under
+ irregular conditions, a small amount of nonlinear stiffness was shown to provide a 5.5\% improvement. The nonlinear stiffness was parametrised relative to the potential energy
+ of the incident wave, leading to the observation that the peak in time-averaged power
+ generation occurred when the nonlinear stiffness potential at the nominal equilibrium
+ position was around 25% of the potential energy of the incident wave.
+ While the trend in power results between the models using linear and nonlinear
+ hydrodynamics with the nonlinear stiffness were reasonably similar, in the nonlinear
+ hydrodynamics model, the nonlinear stiffness more rapidly detunes the system than in
+ the linear model. This finding indicates that a nonlinear stiffness mechanism may be an
+ effective method to detune the device to protect components from extreme operating
+ conditions.}
 }
 
 @phdthesis{farajpour-ouderji2021-thesis,
-	author = {Farajpour Ouderji, Ali},
-	date-added = {2024-07-06 17:38:48 +0930},
-	date-modified = {2024-07-06 17:39:53 +0930},
-	keywords = {WSPR},
+	author = {Ali Farajpour Ouderji},
 	school = {School of Mechanical Engineering, The University of Adelaide},
 	title = {Nonlinear scale-dependent deformation behaviour of beam and plate structures},
 	url = {https://hdl.handle.net/2440/130767},
 	year = {2021},
+	abstract = {mproving the knowledge of the mechanics of small-scale structures is important in many
+ microelectromechanical and nanoelectromechanical systems. Classical continuum mechanics cannot
+ be utilised to determine the mechanical response of small-scale structures, since size effects become
+ significant at small-scale levels. Modified elasticity models have been introduced for the mechanics
+ of ultra-small structures. It has recently been shown that higher-order models, such as nonlocal strain
+ gradient and integral models, are more capable of incorporating scale influences on the mechanical
+ characteristics of small-scale structures than the classical continuum models. In addition, some scaledependent
+ models are restricted to a specific range of sizes. For instance, nonlocal effects on the
+ mechanical behaviour vanish after a particular length. Scrutinising the available literature indicates
+ that the large amplitude vibrations of small-scale beams and plates using two-parameter scaledependent
+ models and nonlocal integral models have not been investigated yet. In addition, no twoparameter
+ continuum model with geometrical nonlinearity has been introduced to analyse the
+ influence of a geometrical imperfection on the vibration of small-scale beams. Analysing these
+ systems would provide useful results for small-scale mass sensors, resonators, energy harvesters and
+ actuators using small-scale beams and plates.
+
+ In this thesis, scale-dependent nonlinear continuum models are developed for the time-dependent
+ deformation behaviour of beam-shaped structures. The models contain two completely different size
+ parameters, which make it able to describe both the reduction and increase in the total stiffness. The
+ first size parameter accounts for the nonlocality of the stress, while the second one describes the strain
+ gradient effect. Geometrical nonlinearity on the vibrations of small-scale beams is captured through
+ the strain-displacement equations. The small-scale beam is assumed to possess geometrical
+ imperfections. Hamilton’s approach is utilised for deriving the corresponding differential equations.
+ The coupled nonlinear motion equations are solved numerically employing Galerkin’s method of
+ discretisation and the continuation scheme of solution. It is concluded that geometrical imperfections
+ would substantially alter the nonlinear vibrational response of small-scale beams. When there is a
+ relatively small geometrical imperfection in the structure, the small-scale beam exhibits a hardeningtype
+ nonlinearity while a combined hardening- and softening-type nonlinearity is found for beams
+ with large geometrical imperfections. The strain gradient influence is associated with an enhancement
+ in the beam stiffness, leading to higher nonlinear resonance frequencies. By contrast, the stress
+ nonlocality is related to a remarkable reduction in the total stiffness, and consequently lower nonlinear
+ resonance frequencies. In addition, a scale-dependent model of beams is proposed in this thesis to
+ analyse the influence of viscoelasticity and geometrical nonlinearity on the vibration of small-scale
+ beams. A nonlocal theory incorporating strain gradients is used for describing the problem in a
+ mathematical form. Implementing the classical continuum model of beams causes a substantial
+ overestimation in the beam vibrational amplitude. In addition, the nonlinear resonance frequency
+ computed by the nonlocal model is less than that obtained via the classical model. When the forcing
+ amplitude is comparatively low, the linear and nonlinear damping mechanisms predict almost the
+ same results. However, when forcing amplitudes become larger, the role of nonlinear viscoelasticity
+ in the vibrational response increases. The resonance frequency of the scale-dependent model with a
+ nonlinear damping mechanism is lower than that of the linear one.
+
+ To simulate scale effects on the mechanical behaviour of ultra-small plates, a novel scale-dependent
+ model of plates is developed. The static deflection and oscillation of rectangular plates at small-scale
+ levels are analysed via a two-dimensional stress-driven nonlocal integral model. A reasonable kernel
+ function, which fulfil all necessary criteria, is introduced for rectangular small-scale plates for the
+ first time. Hamilton and Leibniz integral rules are used for deriving the non-classical motion
+ equations of the structure. Moreover, two types of edge conditions are obtained for the linear vibration.
+ The first type is the well-known classical boundary condition while the second type is the nonclassical
+ edge condition associated with the curvature nonlocality. The differential quadrature
+ technique as a powerful numerical approach for implementing complex boundary conditions is used.
+ It is found that while the Laplacian-based nonlocal model cannot predict size influences on the bending of
+ small-scale plates subject to uniform lateral loading, the bending response is remarkably
+ size-dependent based on the stress-driven plate model. When the size influence increases, the
+ difference between the resonance frequency obtained via the stress-driven model and that of other
+ theories substantially increases. Moreover, the resonance frequency is higher when the curvature
+ nonlocality increases due to an enhancement in the plate stiffness. It is also concluded that more
+ constraint on the small-scale plate causes the system to vibrate at a relatively high frequency. In
+ addition to the linear vibration, the time-dependent large deformation of small-scale plates
+ incorporating size influences is studied. The stress-driven theory is employed to formulate the
+ problem at small-scale levels. Geometrical nonlinearity effects are taken into account via von
+ Kármán’s theory. Three types of edge conditions including one conventional and two nonconventional
+ conditions are presented for nonlinear vibrations. The first non-classical edge condition
+ is associated with the curvature nonlocality while the second one is related to nonlocal in-plane strain
+ components. A differential quadrature technique and an appropriate iteration method are used to
+ compute the nonlinear natural frequencies and maximum in-plane displacements. Molecular
+ dynamics simulations are also performed for verification purposes. Nonlinear frequency ratios are
+ increased when vibration amplitudes increase. Furthermore, the curvature nonlocality would cause
+ the small-scale pate to vibrate at a lower nonlinear frequency ratio. By contrast, the nonlocal in-plane
+ strain has the opposite effect on the small-scale system.
+
+ The outcomes from this thesis will be useful for engineers to design vibrating small-scale resonators
+ and sensors using ultra-small plates.},
 }
 
 @phdthesis{oconnell2021-thesis,
-	author = {O'Connell, James Lawrence Grady},
-	date-added = {2024-07-06 17:36:22 +0930},
-	date-modified = {2024-07-06 17:37:49 +0930},
-	keywords = {WSPR},
+	author = {James Lawrence Grady O'Connell},
 	school = {School of Mechanical Engineering, The University of Adelaide},
 	title = {Interactions between polyhedral permanent magnets},
 	url = {https://hdl.handle.net/2440/135476},
 	year = {2021},
+	abstract = {With the current trend toward industrial automation, efficient energy generation, and electric motor vehicles, permanent magnets are seeing more widespread use than ever before. They permeate our world, enabling sound generation through loudspeakers, mass data storage in the server farms keeping us online, and even the vibration motors in our pockets notifying us of new messages. Never before have permanent magnets seen such widespread use, and thus it is paramount to understand the interactions between them. The primary aim of this thesis is to investigate and model the magnetic fields produced by generalised polyhedral permanent magnets, and the forces and torques between them. To achieve this aim, two main objectives were identified. The first objective was to analytically solve the magnetic charge model field equations for arbitrary polyhedral permanent magnets with a relative permeability of unity. This was performed using two unique approaches, leading to two unique but equivalent sets of field solutions, with the first being more effective when the field is calculated at few points, and the second being more effective when the field is calculated at many points. These field solutions were implemented in MATLAB code with a focus on computation efficiency, thus reducing calculation time. The solutions may also be used to numerically integrate over the surface of another magnet to accurately estimate the force and torque imparted. The second objective was to derive a methodology to model the field due to a polyhedral permanent magnet with non-unity relative permeability. This was done by applying a surface mesh to a magnet, and allowing the ‘magnetic charge’ on each surface element to vary based on the permeability and magnetic field passing through the element. This was derived in such a way that the field is calculated only once, with no iteration required. Rather, a matrix equation is solved to give the surface charge distribution, leading to calculations of the magnetic fields, forces, and torques based on the previous objective. This was again implemented in MATLAB code with focus on computation efficiency, leading to fast calculations. This thesis begins with a short prologue, giving a brief historical overview of the development of magnetism as a physical science. Chapter 1 follows, outlining the theory used for modelling magnets and giving a review of relevant literature. Chapters 2 and 3 outline two new methods for calculating the magnetic field produced by general ideal polyhedral permanent magnets, each with benefits and drawbacks over the other. In addition, Chapter 2 found that a pair of pyramid frustum magnets produce a larger mutual force than a pair of cuboidal magnets, suggesting further investigation into frustum magnets. Chapter 4 applies the methodology from Chapter 3 to a planar array of frustum magnets, finding no significant benefit over traditional cuboidal planar arrays. Chapter 5 explores magnetic permeability, deriving a methodology to calculate magnetic fields, forces, and torques imparted by linear magnetic materials of polyhedral geometry. Finally, the thesis is concluded in Chapter 6, summarising the preceding chapters and outlining potential future work to follow this thesis. The primary outcome of this thesis is the development of a new methodology which can accurately and quickly compute the magnetic fields, forces, and torques imparted by magnetic materials of polyhedral geometry. The methodology allows for materials with constant non-unity relative permeability, more accurately reflecting permanent magnet materials and magnetic behaviour. Moreover, other geometries may be accurately approximated by polyhedra and the methodology applied, allowing the fast and accurate approximation of any current-free magnetostatic system.},
 }
 
 @phdthesis{sobey2019-thesis,
-	author = {Sobey, Sammuel Aleck},
-	date-added = {2024-07-06 17:35:09 +0930},
-	date-modified = {2024-07-06 17:37:53 +0930},
-	keywords = {WSPR},
+	author = {Sammuel Aleck Sobey},
 	school = {School of Mechanical Engineering, The University of Adelaide},
 	title = {Three-Dimensional Measurement of Spinal Kinematics and Whole-Body Activity Recognition},
 	url = {https://hdl.handle.net/2440/120493},
 	year = {2019},
 }
 
+@phdthesis{beaucage-gauvreau2019-thesis,
+	author = {Beaucage-Gauvreau, Erica},
+	school = {School of Mechanical Engineering, The University of Adelaide},
+	title = {Brace for it: assessing lumbar spinal loads for a braced arm-to-thigh lifting and bending technique using a musculoskeletal modelling approach},
+	year = {2019},
+	url = {http://hdl.handle.net/2440/120550},
+	note = {This PhD was supervised by Claire Jones (principle), and co-supervised by Dominic Thewlis, Brian Freeman, and Robert Fraser. I was part of the advisory group for the project and contributed towards some of its publications.},
+	abstract = {Manual material handling activities that involve forward bending and lifting have been identified as risk factors for the development of low back pain, due to the spinal loads and postures experienced during these tasks. Several activities of daily living, such as lifting light-to-moderate objects, gardening, and cleaning, require forward bending and lifting. Many of these tasks can be performed with one hand, therefore allowing for trunk support by placing the free hand on the ipsilateral thigh. This “braced arm-to-thigh technique” (BATT) could especially benefit individuals with low back pain (LBP). However, the BATT has not been evaluated biomechanically in this specific population, and has not been evaluated when applied to tasks other than lifting. The overall goal of this thesis was to evaluate the effect of a bracing force, applied by the hand on the ipsilateral thigh, on lumbar spine loading and trunk kinematics for symmetrical and asymmetrical bending and lifting tasks, using a newly developed and validated full-body musculoskeletal model with a detailed lumbar spine. In Study 1 (Chapter 4), an OpenSim full-body model was developed and validated by adapting an existing OpenSim jogging model to be suitable for lifting motions. Muscle activations predicted by the resulting Lifting Full-Body (LFB) model were directly compared to muscle activations measured with electromyography (EMG), during various lifting tasks. Good agreement, both with respect to pattern and timing, was observed for the back musculature. Comparison between model estimates of intradiscal pressures (IDP) and in vivo IDP measurements also showed strong agreement. The spinal loads estimated by the model matched the trends reported for vertebral body replacement (VBR) measurements in older individuals for similar lifting tasks. This study demonstrated that the LFB model is suitable to evaluate changes in lumbar loading during symmetrical and asymmetrical lifting. In Study 2 (Chapter 5), trunk kinematics and L4/L5 spine loading for the BATT were compared to those of three common unsupported two-handed and one-handed lifting techniques for two loading conditions (2 kg and 10 kg), in 20 healthy participants (30-70 years old) matched in age and gender to 18 participants. The thigh bracing force, measured by a load cell secured to the thigh with a custom apparatus, significantly reduced L4/L5 extension moments, compressive and antero-posterior (AP) shear forces, compared to unsupported lifting techniques. However, the BATT technique also increased asymmetrical L4/L5 moments and trunk angles. In Study 3 (Chapter 6), the BATT was adapted to three activities of daily living (ADLs) to understand the effect of thigh bracing on lumbar loading and spine kinematics in tasks other than lifting. These three tasks, namely weeding (gardening), reaching for objects in low cupboards, and car egress, were simulated in the laboratory, using custom apparatus, by ten healthy young males. The BATT reduced L4/L5 extension moments, compressive and AP shear forces compared to self-selected techniques. This thesis presents the first validated full-body OpenSim model suited to estimating lumbar spine loading in symmetrical and asymmetrical lifting tasks, with or without external loads. Using this LFB model, it was demonstrated that the BATT reduces lumbar extension moments, compression and AP shear forces for lifting tasks and other ADLs, compared to unsupported techniques, for healthy and LBP populations.}
+}
+
 @phdthesis{lewis2018-thesis,
-	author = {Lewis, Amy Rebecca},
-	date-added = {2024-07-06 17:33:56 +0930},
-	date-modified = {2024-07-06 17:37:45 +0930},
-	keywords = {WSPR},
+	author = {Amy Rebecca Lewis},
 	school = {School of Mechanical Engineering, The University of Adelaide},
 	title = {Performance Benefits of Customised Seating Interfaces for Elite Wheelchair Racing Athletes},
 	url = {https://hdl.handle.net/2440/120202},
 	year = {2018},
+	abstract = {Back pain is one of the leading causes of disability, being the second largest contributor to work days missed, and sixth largest disability when expressed in terms of an overall burden measured in disability-adjusted life years. Back pain is a large economic burden, where indirect costs from work days missed far outweigh the direct costs due to treatment. As such, it is economically better to prevent back pain from occurring, rather than treating it after the onset of pain. Some risk factors of back pain which can be monitored to help in the prevention of pain include poor posture and prolonged sedentary behaviour. Inactivity, being similar to prolonged sedentary behaviour, is also a risk factor for some of the major non-communicable diseases responsible for death including heart diseases, stroke, breast and colon cancer, and diabetes. The aims of the thesis were to: 1) compare a number of commonly used measurement systems, including a low-cost wearable sensor, in their ability to measure motion typically seen in the human spine; 2) develop an activity classification model capable of predicting everyday activities including standing, sitting, lying, and walking; 3) create a new, inexpensive device that can simultaneously track user spine posture/kinematics and activity; and 4) validate the device to have accuracy within ±5° for spine posture, and an average positive activity classification rate of 90% or above. This research demonstrates the accuracy of a low-cost wearable sensor in its ability to track motion similar to that of the human spine under typical conditions and compare this to more expensive systems. Using two accelerometers and machine learning, a new activity recognition model was created with the ability to track 13 distinct activities commonly used in daily living, being: standing, sitting, prone, supine, right-side, and left-side lying, walking, jogging, jumping, stair ascending, stair descending, walking on an incline, and transitions. From this new knowledge, a new concept inertial-sensor-based device was created with the capabilities of measuring spinal kinematics and whole-body activity tracking. The device has been developed to measure spinal motions with mean errors of ±2.5°, and therefore meeting the aim to have an accuracy within ±5°, while also showing that the more superior the position on the spine an inertial sensor is placed, the higher the errors in measurement. The device can also predict standing, sitting, lying, and walking with an average accuracy of 95.6%, and therefore above the desired accuracy of 90%. When including all activities, the classifier has an average accuracy of 90.3%. To reduce the global effect of back pain, the developed device has the capabilities to aid in the prevention, management, and rehabilitation of back pain by focussing on two risk factors: poor posture and inactivity. For use in this research, the definition of a good posture is one that compromises between minimising spinal load and minimise muscle activity, therefore a poor posture is one that doesn’t adhere to this requirement which could significantly increase the risk of the onset of back pain. For widespread use, the device created in this research has been developed to be as inexpensive as possible. To meet these goals, the future work of the device has been outlined, including size and cost reduction, as well as increasing the aesthetic appeal, thus making it a more appealing product to the general population.},
 }
 
-@phdthesis{beaucage-gauvreau2019-thesis,
-	author = {Beaucage-Gauvreau, Erica},
-	date-added = {2024-07-06 17:32:17 +0930},
-	date-modified = {2024-07-06 17:37:29 +0930},
-	keywords = {Claire Jones},
+@phdthesis{hayden2018-thesis,
+	author = {David Hayden},
 	school = {School of Mechanical Engineering, The University of Adelaide},
-	title = {Brace for it: assessing lumbar spinal loads for a braced arm-to-thigh lifting and bending technique using a musculoskeletal modelling approach},
-	year = {2019},
+	title = {Optimisation of the Rugby Wheelchair for Performance},
+	year = {2018},
+	url = {http://hdl.handle.net/2440/120268},
+	abstract = {Equipment design in para-sport has a substantial impact on athlete performance. Subsequently, wheelchair designs have progressed to reflect the requirements of their sports; for wheelchair rugby, this has resulted in features including reinforced frames to withstand the frequent high impacts and cambered wheels for improved agility and stability. Whilst these aspects of wheelchair design have advanced, there is currently no accepted method for optimising an individual’s wheelchair configuration (e.g., setting of seat height/seat angle); instead, players rely on their previous experience and support staff in trial-and-error approaches to prescribing set-ups. This is likely due to a number of factors, including: the range of impairment types and severities in the sport, hence optimal set-ups differing across players; difficulty in assessing on-court performance and propulsion kinematics; limited knowledge of the effects of set-up parameters on key performance and propulsion factors; and the substantial time and cost associated with new chair prescriptions. To address this issue, this research aims to improve the knowledge regarding the effect configuration parameters have on performance and propulsion in wheelchair rugby. To achieve this, an improved understanding of current player set-ups and their propulsion approaches is required. Large participant groups (n=16 and 25, for set-up and propulsion analysis respectively) allowed for statistical assessments based on classification groups (high-, mid-, and low-point groups). Significant differences were found in both set-up and propulsion approaches across classifications. The majority of these differences reflect the levels of the player’s activity limitation (i.e., high-point players with greater trunk range of motion used flatter seat angles, and contacted the wheel closer to top dead centre than low-point players). Additionally, a potential trend towards increasing release angles and greater peak accelerations was identified. More detailed individual assessments of propulsion were also performed that revealed variations in intra-stroke acceleration profiles of three players. This information can aid in wheelchair prescription by identifying regions of strength for an individual, with this then emphasised by the wheelchair set-up. To assess the effect of set-up parameters on performance and propulsion measures, a robust design approach using an adjustable wheelchair was implemented with six elite players. This approach required reduced amounts of field testing whilst maintaining the ability to identify the effect of the specific settings of seat height, seat depth, seat angle, and tyre pressure. Half the players reported a blinded preference for a recommended set-up following this testing, while remaining players reported a preference based on ‘comfort’ despite similar results. Finally, a linkage model and regression approach were developed that accounted for individual anthropometrics, propulsion approach, and wheelchair set-up and successfully predicted a performance measure for some players. Overall, this research has improved the knowledge surrounding the effect of wheelchair rugby set-up parameters on performance and propulsion at both group and individual levels. Optimisation of wheelchair set-up should occur at an individual level and consider functional abilities and on-court role; approaches such as the robust design and modelling methods presented in this thesis improve the ability to achieve this in practise.},
+}
+
+@mastersthesis{mclean2018-thesis,
+	author = {Laurence McLean},
+	school = {School of Mechanical Engineering, The University of Adelaide},
+	title = {High-Order Robotic Joint Sensing with Multiple Accelerometer and Gyroscope Systems},
+	url = {https://hdl.handle.net/2440/120357},
+	year = {2018},
+	abstract = {In recent years work into larger humanoid robotic systems and other highly dynamic legged robots has driven a need to increase control system performance and parameter estimation capability. This in turn has seen an increase in the use of higher order joint space derivative terms such as acceleration and jerk being introduced into the control systems and estimators. Although it is evident that the inclusion of these terms can increase the performance of the estimators and control systems, there is a distinct lack of high quality sensors or systems capable of providing this information. Instead it is apparent that those researchers aiming to employ the acceleration and jerk terms are having to resort to other poor quality methods of acquiring the information, which in turn limits the capability of the systems. The works examined suggest that in particular, access to higher quality sources of joint space acceleration measurement or estimation can lead to increases in the performance of control systems and estimators employing these terms. The aim of this work is to investigate the feasibility and capability of a new joint space sensor based on positional encoders and MEMs accelerometers that can estimate angular joint position, velocity and acceleration. The system proposed employs the accelerometer only IMU (AO-IMU) concept to estimate link angular acceleration and velocity in an inertial frame. This concept is then extended to obtain these angular components relative to the previous link. Sensor fusion techniques are then tasked with estimating the velocity states of the AO-IMU and ensuring consistency across the relative states. Two calibration schemes are proposed and demonstrated to correct for the bias, gain and cross axis effects present in the inertial sensors and to correct for the non-ideal placement of the sensors on the body frame. The performance of the system is compared to three online methods common in the literature with significant increases in performance being shown across all states, particularly in the acceleration and velocity states. The base sensor system is then augmented to explore alternate inertial sensor arrangements and structures. In this the effects of adding MEMs gyroscopes to the sensor system are studied and shown to have a small positive effect on the relative velocity state. The addition of multiple relative accelerometers are then studied to examine whether the initial system design choices could be improved upon, with this study showing greater increases in the relative acceleration and velocity states performance. Taking inspiration from the positive results of the multiple relative accelerometer study, an alternate sensor system structure is proposed whereby the robot is instrumented with AO-IMUs and the relative accelerometers omitted. This augmented structure may prove more useful in larger robotic systems. This study initially showed poor results with the low angular velocities experienced by the upper link AO-IMU introducing bias errors. This was corrected for by the inclusion of gyroscopes with the resulting system exhibiting good performance. The findings within this work show that with some modification, the AO-IMU is capable of directly measuring the relative angular acceleration and velocity of a robotic link. When combined with positional sensors this system can be extended to obtain high quality measurements of a joint’s angular position, velocity and acceleration.}
 }
 
 @phdthesis{zhu2014-thesis,
 	author = {Tao Zhu},
-	date-added = {2024-07-06 17:30:29 +0930},
-	date-modified = {2024-07-06 17:37:55 +0930},
-	keywords = {WSPR},
 	school = {School of Mechanical Engineering, The University of Adelaide},
 	title = {Six degree of freedom active vibration isolation using quasi-zero stiffness magnetic levitation},
 	url = {https://hdl.handle.net/2440/85036},
 	year = {2014},
-}
-
-@phdthesis{schubert2021-thesis,
-	author = {Schubert, Benjamin W.},
-	date-added = {2024-07-06 17:27:55 +0930},
-	date-modified = {2024-07-06 17:37:51 +0930},
-	keywords = {WSPR},
-	school = {School of Mechanical Engineering, The University of Adelaide},
-	title = {Performance Enhancement of Submerged Ocean Wave Energy Converter using Nonlinear Stiffness},
-	url = {https://hdl.handle.net/2440/133608},
-	year = {2021},
+	abstract = {Vibration is recognised as one of the most significant disturbances to the operation of mechanical systems. Many traditional vibration isolator designs suffer from the trade-off between load capacity and isolation performance. Furthermore, in providing sufficient stiffness in the vertical direction to meet payload weight requirements, isolators are generally overly stiff in the remaining five degrees of freedom (DOF). In order to address the limitations of traditional isolator designs, this thesis details the development of a 6-DOF active vibration isolation approach. The proposed solution is based on a magnetic levitation system, which provides quasi-zero stiffness payload support in the vertical direction, and inherent zero stiffness in the other five DOFs. The introduced maglev isolator also allows the static force and moment inputs from the payload to be adaptive-passively balanced using permanent magnets. In this thesis, the theoretical background of the proposed maglev vibration isolation method is presented, which demonstrates the ability of the maglev system to achieve the intended vertical payload support and stiffness in the six degrees of freedom. Numerical models for calculating the forces and torques in the proposed maglev system are derived, and the analysis of the cross-coupling effects between the orthogonal DOFs of the isolator is also presented based on the developed system models. A mechanism is introduced by which the cross-coupling effects can be exploited to achieve load balancing for static inputs using permanent magnet forces alone. Following the development of the theoretical model, the mechanical design of the maglev isolator is presented. The designs of the various control systems that are necessary to enable the operation of the maglev isolator are explained. The presented control algorithms achieve three functions: stabilisation of the inherently unstable maglev system, adaptive-passive support of the payload using the cross-coupling effects introduced previously, and autonomous magnet position tuning for online system performance optimisation. Following the discussion of the controller design, a 6-DOF skyhook damping system is presented. The active damping system creates an artificial damping effect in the isolation system to reduce the vibration transmissibility around the resonance frequency of the system. The vibration transmissibilities of the developed maglev isolator were measured in 6-DOF, and results are presented for various combinations of controller settings and damping gains. Through comparisons between the measured performance of the physical system and the predicted performance from theory, the developed maglev vibration isolator demonstrated its practical ability to achieve high performance vibration isolation in six degrees of freedom.},
 }
