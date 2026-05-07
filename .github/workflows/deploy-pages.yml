@@ -41,6 +41,7 @@ jobs:
           python scripts/csv_to_html.py \
             --title "WSPR Publications" \
             --scholar-user-id kxCnpPEAAAAJ \
+            --repo-url "https://github.com/avc-adelaide/wspr-publications" \
             --tab "Journal Papers" wspr-papers-journal.csv \
             --tab "Conference Papers" wspr-papers-conf.csv \
             --theses "Theses" wspr-theses.bib \

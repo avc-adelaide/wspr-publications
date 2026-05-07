@@ -73,6 +73,14 @@ def parse_args() -> argparse.Namespace:
             "(a BibTeX file containing @phdthesis / @mastersthesis entries). May be repeated."
         ),
     )
+    parser.add_argument(
+        "--repo-url",
+        default="",
+        help=(
+            "GitHub repository URL used to render a 'View source data on GitHub' button "
+            "(e.g. https://github.com/org/repo). Omit to hide the button."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -457,6 +465,22 @@ _COMMON_CSS = """\
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
     .count { margin: 10px 2px 0; color: var(--muted); font-size: 0.9rem; }
+    .gh-source-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .gh-source-btn:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+    .gh-source-btn svg { flex-shrink: 0; }
 """
 
 _TAB_CSS = """\
@@ -541,18 +565,43 @@ _THESES_CSS = """\
     }
 """
 
+_GH_ICON_SVG = (
+    '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">'
+    '<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38'
+    " 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15"
+    "-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07"
+    "-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0"
+    " .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82"
+    ".44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73"
+    '.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>'
+    "</svg>"
+)
+
+
+def _gh_source_button_html(repo_url: str) -> str:
+    """Return an anchor tag linking to *repo_url*, or an empty string if blank."""
+    if not repo_url:
+        return ""
+    safe_url = html.escape(repo_url.strip(), quote=True)
+    return (
+        f'<a class="gh-source-btn" href="{safe_url}" target="_blank" rel="noopener noreferrer">'
+        f"{_GH_ICON_SVG}View source data on GitHub</a>"
+    )
+
 
 def build_html(
     page_title: str,
     headers: list[str],
     rows: list[dict[str, str]],
     scholar_user_id: str,
+    repo_url: str = "",
 ) -> str:
     """Build a single-table HTML page (original behaviour)."""
     safe_title = html.escape(page_title)
     headers_json = json.dumps(headers, ensure_ascii=False)
     rows_json = json.dumps(rows, ensure_ascii=False)
     scholar_user_id_json = json.dumps((scholar_user_id or "").strip(), ensure_ascii=False)
+    gh_button = _gh_source_button_html(repo_url)
 
     return f"""<!doctype html>
 <html lang="en">
@@ -572,6 +621,7 @@ def build_html(
         <div class="meta">Sortable and searchable publication table</div>
       </div>
       <div class="controls">
+        {gh_button}
         <input id="search" type="search" placeholder="Search all fields" />
         <button class="button" id="clear" type="button">Clear</button>
       </div>
@@ -709,6 +759,7 @@ def build_html_tabs(
     page_title: str,
     tabs: list[dict],
     scholar_user_id: str,
+    repo_url: str = "",
 ) -> str:
     """Build a multi-tab HTML page.
 
@@ -723,6 +774,7 @@ def build_html_tabs(
     """
     safe_title = html.escape(page_title)
     scholar_user_id_json = json.dumps((scholar_user_id or "").strip(), ensure_ascii=False)
+    gh_button = _gh_source_button_html(repo_url)
 
     # Build tab-bar buttons
     tab_buttons = "\n".join(
@@ -802,6 +854,7 @@ def build_html_tabs(
         <h1>{safe_title}</h1>
         <div class="meta">Sortable and searchable publication tables</div>
       </div>
+      {gh_button}
       </div>
     </div>
 
@@ -854,7 +907,7 @@ def main() -> None:
             entries = parse_bib_theses(Path(bib_path_str))
             tabs.append({"type": "theses", "name": tab_name, "entries": entries})
             print(f"  Tab '{tab_name}': {len(entries)} theses from {bib_path_str}")
-        html_text = build_html_tabs(args.title, tabs, args.scholar_user_id)
+        html_text = build_html_tabs(args.title, tabs, args.scholar_user_id, args.repo_url)
         out_path.write_text(html_text, encoding="utf-8")
         print(f"Wrote {out_path} with {len(tabs)} tab(s)")
     else:
@@ -862,7 +915,7 @@ def main() -> None:
         csv_path = Path(args.csv)
         headers, rows = read_csv(csv_path)
         out_path.write_text(
-            build_html(args.title, headers, rows, args.scholar_user_id), encoding="utf-8"
+            build_html(args.title, headers, rows, args.scholar_user_id, args.repo_url), encoding="utf-8"
         )
         print(f"Wrote {out_path} from {csv_path} ({len(rows)} rows)")
 
